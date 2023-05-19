@@ -32,6 +32,9 @@ migrate_working_dir/
 .pub/
 /build/
 
+# Contains sensitive information
+api_keys.dart
+
 # Symbolication related
 app.*.symbols
 
