@@ -1,13 +1,15 @@
 class WeatherData {
   final String city;
   final String country;
-  final String temperature;
+  final String temperatureCelsius;
+  final String temperatureFahrenheit;
   final String weatherDescription;
 
   WeatherData({
     required this.city,
     required this.country,
-    required this.temperature,
+    required this.temperatureCelsius,
+    required this.temperatureFahrenheit,
     required this.weatherDescription,
   });
 
@@ -15,8 +17,10 @@ class WeatherData {
     return WeatherData(
       city: json['location']['name'],
       country: json['location']['country'],
-      temperature: json['current']['temp_c'].toString(),
-      weatherDescription: json['current']['condition']['text'],
+      temperatureCelsius: json['current']['temp_c'].round().toString(),
+      temperatureFahrenheit: json['current']['temp_f'].round().toString(),
+      weatherDescription:
+          "http://${json['current']['condition']['icon'].substring(2)}",
     );
   }
 }

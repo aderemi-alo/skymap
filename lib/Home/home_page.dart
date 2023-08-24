@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   WeatherData? weatherData;
-  TextEditingController placeController = TextEditingController();
+  TextEditingController locationController = TextEditingController();
   dynamic location = "Lekki";
   late Position position;
 
@@ -36,35 +36,51 @@ class _HomePageState extends State<HomePage> {
           title: const Text("Weather Data"),
         ),
         body: weatherData != null
-            ? Column(
-                children: [
-                  TextFormField(
-                    controller: placeController,
-                    decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                            onPressed: () {
-                              getWeatherData(placeController.text.trim());
-                            },
-                            icon: Icon(Icons.check))),
-                  ),
-                  Text(weatherData!.city),
-                  Text(weatherData!.country),
-                  Text(weatherData!.temperature),
-                  Text(weatherData!.weatherDescription),
-                  IconButton(
-                      onPressed: () async {
-                        position = await Geolocator.getCurrentPosition(
-                            desiredAccuracy: LocationAccuracy.best);
-                        getWeatherData(
-                            "${position.longitude} ${position.latitude}");
+            ? Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    SearchBar(
+                      onSubmitted: (value) async {
+                        await getWeatherData(value);
+                        locationController.clear();
                       },
-                      icon: Icon(CupertinoIcons.map_pin_ellipse))
-                ],
+                      elevation: MaterialStateProperty.all(0),
+                      controller: locationController,
+                      hintText: "Where?",
+                      backgroundColor: MaterialStateProperty.all(
+                        Colors.transparent.withOpacity(0.2),
+                      ),
+                      trailing: [
+                        IconButton(
+                          onPressed: () {
+                            locationController.clear();
+                          },
+                          icon: Icon(Icons.clear),
+                        )
+                      ],
+                      leading: Icon(Icons.search),
+                    ),
+                    Text(weatherData!.city),
+                    Text(weatherData!.country),
+                    Text(weatherData!.temperatureCelsius),
+                    Text(weatherData!.temperatureFahrenheit),
+                    Image.network(weatherData!.weatherDescription),
+                    IconButton(
+                        onPressed: () async {
+                          position = await Geolocator.getCurrentPosition(
+                              desiredAccuracy: LocationAccuracy.best);
+                          getWeatherData(
+                              "${position.longitude} ${position.latitude}");
+                        },
+                        icon: const Icon(CupertinoIcons.map_pin_ellipse))
+                  ],
+                ),
               )
-            : Center(
+            : const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [CircularProgressIndicator()],
+                  children: [CircularProgressIndicator()],
                 ),
               ));
   }

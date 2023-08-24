@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:skymap/Home/home_page.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +17,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       darkTheme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
       home: const HomePage(),
